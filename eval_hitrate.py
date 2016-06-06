@@ -42,7 +42,8 @@ if __name__ == '__main__':
             if not term.isalpha() or term in stoplist:
                 continue
             n_terms += 1
-            if term not in cached:
+            tid = vocab.get(term, -1)
+            if tid not in cached:
                 all_cached = False
             else:
                 n_cached_terms += 1
