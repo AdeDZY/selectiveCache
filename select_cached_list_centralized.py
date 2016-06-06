@@ -1,3 +1,4 @@
+#!/opt/python27/bin/python
 import argparse
 
 if __name__ == '__main__':
@@ -10,8 +11,9 @@ if __name__ == '__main__':
     upper_bound = args.memory_size * 1024 * 1024 * 1024 / 8
     for line in args.term_qtfdf_file:
         term, tid, qtfdf, qtf, df = line.split(' ')
+        df = int(df)
         if total + df < upper_bound:
-            print line
+            print line.strip()
             total += df
         else:
             break

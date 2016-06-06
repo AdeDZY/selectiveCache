@@ -1,4 +1,6 @@
+#!/opt/python27/bin/python
 import argparse
+import math
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -11,7 +13,9 @@ if __name__ == '__main__':
         qtf = int(qtf)
         tid = int(tid)
         df = int(df)
-        qtfdf = float(qtf)/df
+        if df < 200:
+            continue
+        qtfdf = float(qtf)/math.log(df)
         res.append((qtfdf, tid, term, qtf, df))
 
     res = sorted(res, reverse=True)
