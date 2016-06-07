@@ -17,7 +17,7 @@ if __name__ == '__main__':
     # read vocab
     vocab = {}
     for line in args.intQterm_file:
-        term, qtf, tid, df = line.split(' ')
+        term, tid, df = line.split(' ')
         tid = int(tid)
         vocab[term] = tid
 
@@ -53,6 +53,6 @@ if __name__ == '__main__':
         if has_term:
             n_queries += 1
 
-    print n_queries, n_all_cached, n_terms, n_cached_terms
+    print n_queries, n_all_cached, n_terms, n_cached_terms, float(n_cached_terms)/n_terms
 
 

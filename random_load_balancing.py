@@ -11,10 +11,10 @@ if __name__ == '__main__':
     parser.add_argument("shard_distribution_file", type=argparse.FileType('w'))
     args = parser.parse_args()
 
-    l = range(1, args.n_shards + 1)
+    l = [i for i in range(1, args.n_shards + 1)] 
     random.shuffle(l)
 
-    t = round(float(args.n_shards / args.n_machines))
+    t = int((float(args.n_shards) / args.n_machines))
     for i in range(args.n_machines):
         s = i * t
         e = s + t

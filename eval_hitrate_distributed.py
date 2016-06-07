@@ -5,7 +5,7 @@ from os.path import isfile, join
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument("cached_queries_dir", type=argparse.FileType('r'))
+    parser.add_argument("cached_queries_dir")
     parser.add_argument("intQterm_file", type=argparse.FileType('r'))
     parser.add_argument("test_queries_file", type=argparse.FileType('r'))
     parser.add_argument("query_shardlist_file", type=argparse.FileType('r'))
@@ -31,7 +31,7 @@ if __name__ == '__main__':
     # read vocab
     vocab = {}
     for line in args.intQterm_file:
-        term, qtf, tid, df = line.split(' ')
+        term, tid, df = line.split(' ')
         tid = int(tid)
         vocab[term] = tid
 
@@ -50,7 +50,7 @@ if __name__ == '__main__':
     shardlist = {}
     machinelist = {}
     for line in args.query_shardlist_file:
-        items = [int(t) for t in line.strip.split(' ')]
+        items = [int(t) for t in line.strip().split(' ')]
         q = items[0]
         shardlist[q - 1] = items[1:]
         machinelist[q - 1] = set()
@@ -75,6 +75,7 @@ if __name__ == '__main__':
             has_term = True
             tid = vocab.get(term, -1)
             for m in machinelist[qid]:
+            #for m in range(n_machines):
                 n_search += 1
                 if tid not in cached[m]:
                     all_cached = False
@@ -86,6 +87,6 @@ if __name__ == '__main__':
             n_queries += 1
         qid += 1
 
-    print n_queries, n_all_cached, n_search, n_hit
+    print n_queries, n_all_cached, n_search, n_hit, float(n_hit)/n_search
 
 
