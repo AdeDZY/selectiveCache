@@ -13,9 +13,10 @@ if __name__ == '__main__':
         qtf = int(qtf)
         tid = int(tid)
         df = int(df)
-        if df < 200:
+        if df < 1:
             continue
-        qtfdf = float(qtf)/math.log(df)
+        #qtfdf = float(qtf)/math.log(df)
+        qtfdf = float(qtf)/df
         res.append((qtfdf, tid, term, qtf, df))
 
     res = sorted(res, reverse=True)
