@@ -16,7 +16,7 @@ if __name__ == '__main__':
     l = []
     for line in args.term_qtfdf_file:
         term, tid, qtfdf, qtf, df = line.split(' ')
-        l.append((tid, line.strip()))
+        l.append((int(tid), line))
 
     i = 0
     while True:
@@ -26,7 +26,7 @@ if __name__ == '__main__':
         if not isfile(p):
             break
 
-        with open(p) as f, open(join(args.output_dir), str(i)) as fout:
+        with open(p) as f, open(join(args.output_dir, str(i)), 'w') as fout:
             shard_df = {}
             for line in f:
                 tid, df, ctf, cent = line.split(' ')
@@ -42,7 +42,7 @@ if __name__ == '__main__':
                 if tid not in shard_df:
                     continue
                 if total + shard_df[tid] < upper_bound:
-                    print line
-                    total += df
+                    fout.write(line)
+                    total += shard_df[tid]
                 else:
                     break
