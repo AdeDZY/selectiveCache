@@ -8,6 +8,7 @@ if __name__ == '__main__':
     parser.add_argument("term_qtfdf_file", type=argparse.FileType('r'))
     parser.add_argument("memory_size", type=float, help="in GB, per machine")
     parser.add_argument("shard_feature_dir")
+    parser.add_argument("shard_distribution_file", type=argparse.FileType('r'))
     parser.add_argument("output_dir")
     args = parser.parse_args()
 
@@ -19,30 +20,29 @@ if __name__ == '__main__':
         l.append((int(tid), line))
 
     i = 0
-    while True:
+    for line in args.shard_distribution_file:
         i += 1
-        p = join(args.shard_feature_dir, str(i) + '.feat')
+        shards = [int(t) for t in line.split()]
+        fout = open(join(args.output_dir, str(i)), 'w')
+        machine_df = {}
+        for shard in shards:
+            p = join(args.shard_feature_dir, str(shard) + '.feat')
+            with open(p) as f:
+                for line in f:
+                    tid, df, ctf, cent = line.split(' ')
+                    tid = int(tid)
+                    df = int(df)
+                    ctf = int(ctf)
+                    if tid == -1:
+                        continue
+                    machine_df[tid] = machine_df.get(tid, 0) + df
 
-        if not isfile(p):
-            break
-
-        with open(p) as f, open(join(args.output_dir, str(i)), 'w') as fout:
-            shard_df = {}
-            for line in f:
-                tid, df, ctf, cent = line.split(' ')
-                tid = int(tid)
-                df = int(df)
-                ctf = int(ctf)
-                if tid == -1:
-                    continue
-                shard_df[tid] = df
-
-            total = 0
-            for tid, line in l:
-                if tid not in shard_df:
-                    continue
-                if total + shard_df[tid] < upper_bound:
-                    fout.write(line)
-                    total += shard_df[tid]
-                else:
-                    break
+        total = 0
+        for tid, line in l:
+            if tid not in machine_df:
+                  continue
+            if total + machine_df[tid] < upper_bound:
+                fout.write(line)
+                total += machine_df[tid]
+            else:
+                break
