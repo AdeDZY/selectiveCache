@@ -40,7 +40,7 @@ if __name__ == '__main__':
         total = 0
         for tid, line in l:
             if tid not in machine_df:
-                  continue
+                continue
             if total + machine_df[tid] < upper_bound:
                 fout.write(line)
                 total += machine_df[tid]
