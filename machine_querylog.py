@@ -37,9 +37,12 @@ if __name__ == '__main__':
         items = [int(t) for t in line.strip().split()]
         qid = items[0]
         query = queries[qid - 1]
+        ms = set()
         for shard in items[1: 1 + args.cutoff]:
             m = shard2machine[shard]
-            fouts[m - 1].write(query)
+            ms.add(m)
+        for m in ms:
+            fouts[m].write(query)
 
     for f in fouts:
         f.close()

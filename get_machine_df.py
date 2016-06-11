@@ -43,7 +43,7 @@ if __name__ == '__main__':
             for tid, df in shards_df[shard].items():
                 machine_df[tid] = machine_df.get(tid, 0) + df
 
-        fout = open(join(args.output_dir, str(m)))
+        fout = open(join(args.output_dir, str(m)), 'w')
         for tid, df in machine_df.items():
             fout.write("{0} {1}\n".format(tid, df))
 
