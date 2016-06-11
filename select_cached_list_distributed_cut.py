@@ -54,11 +54,13 @@ if __name__ == '__main__':
 
     # get machine df
     m = 0
-    for shards in machine2shards.items():
+    for shards in machine2shards:
         m += 1
         fout = open(join(args.output_dir, str(m)), 'w')
         machine_df = {}
         for shard in shards:
+            if shard not in shards_df_cut:
+                continue
             for tid, df in shards_df_cut[shard].items():
                 machine_df[tid] = machine_df.get(tid, 0) + df
 
