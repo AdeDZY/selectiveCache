@@ -44,7 +44,7 @@ if __name__ == '__main__':
         tmp = set()
         for line in cached_queries_file:
             items = line.split(' ')
-            tid = int(items[0])
+            tid = int(items[1])
             shards = items[5:]
             for s in shards:
                 cached[int(s) - 1].add(tid)

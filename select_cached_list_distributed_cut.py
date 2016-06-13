@@ -77,7 +77,7 @@ if __name__ == '__main__':
             if total + machine_df[tid] < upper_bound:
                 fout.write(line)
                 for shard in shard_with_term[tid]:
-                    fout.write(str(shard) + ' ') # shards with this term
+                    fout.write(' ' + str(shard)) # shards with this term
                 fout.write('\n')
                 total += machine_df[tid]
             else:
