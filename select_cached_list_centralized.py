@@ -1,5 +1,6 @@
 #!/opt/python27/bin/python
 import argparse
+import sys
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -9,11 +10,15 @@ if __name__ == '__main__':
 
     total = 0
     upper_bound = args.memory_size * 1024 * 1024 * 1024 / 8
+    selected = set()
     for line in args.term_qtfdf_file:
         term, tid, qtfdf, qtf, df = line.split(' ')
         df = int(df)
         if total + df < upper_bound:
-            print line.strip()
-            total += df
+            if tid not in selected:
+                selected.add(tid)
+                print line.strip()
+                total += df
         else:
             break
+    

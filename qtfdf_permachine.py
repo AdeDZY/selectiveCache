@@ -20,11 +20,13 @@ if __name__ == '__main__':
         term, qtf, tid, df = line.split(' ')
         qtf = int(qtf)
         tid = int(tid)
+        #df = int(df)
         df = shard_df.get(tid, 0)
-        if df < 1:
+        if df < 1 or qtf < 10:
             continue
-        #qtfdf = float(qtf)/math.log(df)
+        #qtfdf = float(qtf)/math.log(df + 1)
         qtfdf = float(qtf)/df
+        df = shard_df.get(tid, 0)
         res.append((qtfdf, tid, term, qtf, df))
 
     res = sorted(res, reverse=True)

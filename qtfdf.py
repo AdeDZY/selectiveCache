@@ -13,7 +13,7 @@ if __name__ == '__main__':
         qtf = int(qtf)
         tid = int(tid)
         df = int(df)
-        if df < 1:
+        if df < 1 :
             continue
         #qtfdf = float(qtf)/math.log(df)
         qtfdf = float(qtf)/df
