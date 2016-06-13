@@ -16,7 +16,9 @@ if __name__ == '__main__':
     upper_bound = args.memory_size * 1024 * 1024 * 1024 / 8
 
     l = []
+
     for line in args.term_qtfdf_file:
+        line = line.strip()
         term, tid, qtfdf, qtf, df = line.split(' ')
         l.append((int(tid), line))
 
@@ -58,11 +60,15 @@ if __name__ == '__main__':
         m += 1
         fout = open(join(args.output_dir, str(m)), 'w')
         machine_df = {}
+        shard_with_term = {}
         for shard in shards:
             if shard not in shards_df_cut:
                 continue
             for tid, df in shards_df_cut[shard].items():
                 machine_df[tid] = machine_df.get(tid, 0) + df
+                if tid not in shard_with_term:
+                    shard_with_term[tid] = []
+                shard_with_term[tid].append(shard)
 
         total = 0
         for tid, line in l:
@@ -70,6 +76,9 @@ if __name__ == '__main__':
                 continue
             if total + machine_df[tid] < upper_bound:
                 fout.write(line)
+                for shard in shard_with_term:
+                    fout.write(str(shard) + ' ') # shards with this term
+                fout.write('\n')
                 total += machine_df[tid]
             else:
                 break

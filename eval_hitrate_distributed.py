@@ -21,10 +21,12 @@ if __name__ == '__main__':
     # read shard load balancing
     shard2machine = {}
     m = 0
+    n_shards = 0
     for line in args.shard_distribution_file:
         shards = [int(t) for t in line.split()]
         for s in shards:
             shard2machine[s] = m
+            n_shards += 1
         m += 1
     n_machines = m
 
@@ -36,15 +38,16 @@ if __name__ == '__main__':
         vocab[term] = tid
 
     # read cached
-    cached = []
+    cached = [set() for i in range(n_shards)]
     for m in range(1, n_machines + 1):
         cached_queries_file = open(join(args.cached_queries_dir, str(m)))
         tmp = set()
         for line in cached_queries_file:
-            term, tid, a, b, c = line.split(' ')
-            tid = int(tid)
-            tmp.add(tid)
-        cached.append(tmp)
+            items = line.split(' ')
+            tid = int(items[0])
+            shards = items[5:]
+            for s in shards:
+                cached[int(s) - 1].add(tid)
 
     # read shardlist
     shardlist = {}
@@ -74,10 +77,9 @@ if __name__ == '__main__':
                 continue
             has_term = True
             tid = vocab.get(term, -1)
-            for m in machinelist[qid]:
-            #for m in range(n_machines):
+            for s in shardlist[qid]:
                 n_search += 1
-                if tid not in cached[m]:
+                if tid not in cached[s - 1]:
                     all_cached = False
                 else:
                     n_hit += 1
