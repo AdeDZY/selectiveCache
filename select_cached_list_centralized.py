@@ -15,7 +15,7 @@ if __name__ == '__main__':
         term, tid, qtfdf, qtf, df = line.split(' ')
         df = int(df)
         if total + df < upper_bound:
-            if tid not in selected:
+            if df > 0 and tid not in selected:
                 selected.add(tid)
                 print line.strip()
                 total += df

@@ -15,20 +15,29 @@ if __name__ == '__main__':
         shard_df[tid] = df
 
     # get dtfdf
-    res = []
+    all_qtf = {}
+    all_df = {}
+    all_term = {}
     for line in args.int_term_file:
         term, qtf, tid, df = line.split(' ')
         qtf = int(qtf)
         tid = int(tid)
         #df = int(df)
         df = shard_df.get(tid, 0)
-        if df < 1 or qtf < 10:
+        if df < 1:
             continue
+        all_df[tid] = df
         #qtfdf = float(qtf)/math.log(df + 1)
-        qtfdf = float(qtf)/df
-        df = shard_df.get(tid, 0)
-        res.append((qtfdf, tid, term, qtf, df))
+        all_qtf[tid] = all_qtf.get(tid, 0) + qtf
+        if tid not in all_term:
+            all_term[tid] = term  
 
-    res = sorted(res, reverse=True)
-    for qtfdf, tid, term, qtf, df in res:
-        print term, tid, qtfdf, qtf, df
+    all_qtfdf = {}
+    for tid in all_qtf:
+        qtf = all_qtf[tid]
+        df = all_df[tid]
+        all_qtfdf[tid] = float(qtf)/df
+    res = sorted([(v, k) for k, v in all_qtfdf.items()], reverse=True)
+    for qtfdf, tid in res:
+        if tid not in shard_df: continue
+        print all_term[tid], tid, qtfdf, all_qtf[tid], shard_df[tid]

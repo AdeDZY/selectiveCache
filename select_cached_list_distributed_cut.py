@@ -16,11 +16,15 @@ if __name__ == '__main__':
     upper_bound = args.memory_size * 1024 * 1024 * 1024 / 8
 
     l = []
+    all_tids = set()
 
     for line in args.term_qtfdf_file:
         line = line.strip()
         term, tid, qtfdf, qtf, df = line.split(' ')
-        l.append((int(tid), line))
+        tid = int(tid)
+        if tid not in all_tids:
+            all_tids.add(tid)
+            l.append((tid, line))
 
     machine2shards = []
     shards_df = {}
@@ -75,7 +79,8 @@ if __name__ == '__main__':
             if tid not in machine_df:
                 continue
             if total + machine_df[tid] < upper_bound:
-                fout.write(line)
+                if machine_df[tid] == 0: continue
+                fout.write(' '.join(line.split(' ')[0:-1]) + ' ' + str(machine_df[tid]))
                 for shard in shard_with_term[tid]:
                     fout.write(' ' + str(shard)) # shards with this term
                 fout.write('\n')
