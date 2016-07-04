@@ -42,7 +42,9 @@ if __name__ == '__main__':
             if tid not in machine_df:
                 continue
             if total + machine_df[tid] < upper_bound:
-                fout.write(line)
+                fout.write(line.strip() + ' ' + str(machine_df.get(tid, 0)) + '\n')
                 total += machine_df[tid]
             else:
-                break
+                #print line, total
+                #break
+                continue
