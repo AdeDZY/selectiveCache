@@ -41,7 +41,8 @@ if __name__ == '__main__':
         cached_queries_file = open(join(args.cached_queries_dir, str(m)))
         tmp = set()
         for line in cached_queries_file:
-            term, tid, a, b, c = line.split(' ')
+            items = line.split(' ')
+            term, tid = items[0:2]
             tid = int(tid)
             tmp.add(tid)
         cached.append(tmp)
@@ -84,7 +85,8 @@ if __name__ == '__main__':
         if all_cached and has_term:
             n_all_cached += 1
         else:
-            print line 
+            pass
+            #print line 
         if has_term:
             n_queries += 1
         qid += 1

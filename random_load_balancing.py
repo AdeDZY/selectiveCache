@@ -12,7 +12,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     l = [i for i in range(1, args.n_shards + 1)] 
-    #random.shuffle(l)
+    random.shuffle(l)
 
     t = int((float(args.n_shards) / args.n_machines))
     for i in range(args.n_machines):
