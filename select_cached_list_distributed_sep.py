@@ -32,10 +32,17 @@ if __name__ == '__main__':
         tmp = sorted(tmp, reverse=True)
 
         total = 0
+        shards_total = {}
         for qtfdf, term, tid, qtf, df, shard in tmp:
             if total + df < upper_bound:
+                shards_total[shard] = shards_total.get(shard, 0) + df
                 fout.write(term + ' ' + str(tid) + ' ' + str(qtfdf) + ' ' + str(qtf) + ' ' + str(df) + ' ' + str(shard))
                 fout.write('\n')
                 total += df
             else:
-                break
+                continue
+
+        print total,
+        for shard, t in shards_total.items():
+            print "{0}:{1}".format(shard, t),
+        print ""
