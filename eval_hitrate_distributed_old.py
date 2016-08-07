@@ -54,10 +54,10 @@ if __name__ == '__main__':
         items = [int(t) for t in line.strip().split(' ')]
         q = items[0]
         shardlist[q - 1] = items[1:]
-        machinelist[q - 1] = set()
+        machinelist[q - 1] = {} 
         for s in items[1:]:
             m = shard2machine[s]
-            machinelist[q - 1].add(m)
+            machinelist[q - 1][m] = machinelist[q - 1].get(m, 0) + 1
 
     # queries
     n_all_cached = 0
@@ -75,18 +75,18 @@ if __name__ == '__main__':
                 continue
             has_term = True
             tid = vocab.get(term, -1)
-            for m in machinelist[qid]:
-                n_search += 1
+            for m, t in machinelist[qid].items():
+                n_search += t
                 if tid not in cached[m]:
                     all_cached = False
-                    #print term, m, 
+                    print term, m, 
                 else:
-                    n_hit += 1
+                    n_hit += t
         if all_cached and has_term:
             n_all_cached += 1
         else:
             pass
-            #print line 
+            print line 
         if has_term:
             n_queries += 1
         qid += 1

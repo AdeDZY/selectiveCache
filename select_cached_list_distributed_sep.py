@@ -2,6 +2,7 @@
 import argparse
 from os import listdir
 from os.path import isfile, join
+import math
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -44,5 +45,5 @@ if __name__ == '__main__':
 
         print total,
         for shard, t in shards_total.items():
-            print "{0}:{1}".format(shard, t),
+            print "{0}:{1}".format(shard, t/float(total)),
         print ""
