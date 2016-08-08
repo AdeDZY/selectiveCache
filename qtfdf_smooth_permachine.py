@@ -14,7 +14,7 @@ if __name__ == '__main__':
     global_qtf = {}
     for line in args.global_qtfdf_file:
         term, tid, qtfdf, qtf, df = line.split(' ')
-        global_qtf[int(tid)] = int(qtf)
+        global_qtf[int(tid)] = float(qtf)
 
     # read shard df
     shard_df = {}
@@ -43,7 +43,7 @@ if __name__ == '__main__':
         qtf = all_qtf[tid]
         df = all_df[tid]
         gqtf = global_qtf[tid]
-        all_qtfdf[tid] = ((1-args.alpha) * qtf + args.alpha * gqtf)/df
+        all_qtfdf[tid] = (float(qtf) + args.alpha * gqtf)/df
     res = sorted([(v, k) for k, v in all_qtfdf.items()], reverse=True)
     for qtfdf, tid in res:
         if tid not in shard_df: continue
