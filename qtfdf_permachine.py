@@ -27,7 +27,6 @@ if __name__ == '__main__':
         if df < 1:
             continue
         all_df[tid] = df
-        #qtfdf = float(qtf)/math.log(df + 1)
         all_qtf[tid] = all_qtf.get(tid, 0) + qtf
         if tid not in all_term:
             all_term[tid] = term  
