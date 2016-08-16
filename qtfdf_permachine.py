@@ -22,7 +22,6 @@ if __name__ == '__main__':
         term, qtf, tid, df = line.split(' ')
         qtf = int(qtf)
         tid = int(tid)
-        #df = int(df)
         df = shard_df.get(tid, 0)
         if df < 1:
             continue
@@ -35,7 +34,7 @@ if __name__ == '__main__':
     for tid in all_qtf:
         qtf = all_qtf[tid]
         df = all_df[tid]
-        all_qtfdf[tid] = float(qtf)/df
+        all_qtfdf[tid] = (float(qtf))/(df)
     res = sorted([(v, k) for k, v in all_qtfdf.items()], reverse=True)
     for qtfdf, tid in res:
         if tid not in shard_df: continue

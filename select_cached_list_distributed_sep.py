@@ -40,10 +40,10 @@ if __name__ == '__main__':
                 fout.write(term + ' ' + str(tid) + ' ' + str(qtfdf) + ' ' + str(qtf) + ' ' + str(df) + ' ' + str(shard))
                 fout.write('\n')
                 total += df
-            else:
+            else: 
                 continue
 
-        print total,
-        for shard, t in shards_total.items():
-            print "{0}:{1}".format(shard, t/float(total)),
-        print ""
+        #print total,
+        #for shard, t in shards_total.items():
+        #    print "{0}:{1}".format(shard, t/1000), #/float(total)),
+        #print ""

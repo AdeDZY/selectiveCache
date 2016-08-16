@@ -20,9 +20,7 @@ if __name__ == '__main__':
         all_qtf[tid] = all_qtf.get(tid, 0) + qtf
         if tid not in all_term:
             all_term[tid] = term  
-        #qtfdf = float(qtf)/math.log(df)
-        #qtfdf = float(qtf)/df
-        #res.append((qtfdf, tid, term, qtf, df))
+
     all_qtfdf = {}
     for tid in all_qtf:
         qtf = all_qtf[tid]

@@ -15,6 +15,7 @@ if __name__ == '__main__':
     for line in args.shard_size_file:
         line = line.strip()
         size, sid = line.split(' ')
+        if "t" in sid: continue
         shard_size[int(sid)] = int(size)
 
     # read shard df
