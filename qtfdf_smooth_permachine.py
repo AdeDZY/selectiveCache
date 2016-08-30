@@ -42,13 +42,13 @@ if __name__ == '__main__':
 
     all_qtfdf = {}
     for tid in global_qtf:
-        qtf = all_qtf.get(tid, 0)
+        qtf = all_qtf.get(tid, 1)
         df = shard_df.get(tid, 0)
         gqtf = global_qtf.get(tid, 1)
         gdf = global_df.get(tid, 0)
         if df < 1: continue
-        #all_qtfdf[tid] = (float(qtf) + args.alpha * gqtf)/df
-        #all_qtfdf[tid] = gqtf/gdf
+        #all_qtfdf[tid] = ((1- args.alpha) * float(qtf) + args.alpha * gqtf)/gdf
+        #all_qtfdf[tid] = float(qtf)/df
         all_qtfdf[tid] = (1 - args.alpha) * qtf/df + args.alpha * gqtf/gdf 
         #if gqtf > 20 and qtf/gqtf > 0.5:
         #    all_qtfdf[tid] = 10000

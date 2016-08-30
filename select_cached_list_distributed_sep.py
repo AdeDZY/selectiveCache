@@ -35,7 +35,7 @@ if __name__ == '__main__':
         total = 0
         shards_total = {}
         for qtfdf, term, tid, qtf, df, shard in tmp:
-            if total + df < upper_bound:
+            if total + df < upper_bound :
                 shards_total[shard] = shards_total.get(shard, 0) + df
                 fout.write(term + ' ' + str(tid) + ' ' + str(qtfdf) + ' ' + str(qtf) + ' ' + str(df) + ' ' + str(shard))
                 fout.write('\n')
@@ -43,7 +43,7 @@ if __name__ == '__main__':
             else: 
                 continue
 
-        #print total,
-        #for shard, t in shards_total.items():
-        #    print "{0}:{1}".format(shard, t/1000), #/float(total)),
-        #print ""
+       # print total,
+       # for shard, t in shards_total.items():
+       #     print "{0}:{1}".format(shard, t/1000), #/float(total)),
+       # print ""

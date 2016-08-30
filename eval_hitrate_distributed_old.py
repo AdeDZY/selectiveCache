@@ -11,6 +11,7 @@ if __name__ == '__main__':
     parser.add_argument("query_shardlist_file", type=argparse.FileType('r'))
     parser.add_argument("shard_distribution_file", type=argparse.FileType('r'))
     parser.add_argument("stoplist_file", type=argparse.FileType('r'))
+    parser.add_argument("--shardlim", "-l", type=int, default=1003)
     args = parser.parse_args()
 
     # read stopwords
@@ -53,9 +54,10 @@ if __name__ == '__main__':
     for line in args.query_shardlist_file:
         items = [int(t) for t in line.strip().split(' ')]
         q = items[0]
-        shardlist[q - 1] = items[1:]
+        lim = min(len(items) - 1, args.shardlim)
+        shardlist[q - 1] = items[1:lim + 1]
         machinelist[q - 1] = {} 
-        for s in items[1:]:
+        for s in items[1:lim + 1]:
             m = shard2machine[s]
             machinelist[q - 1][m] = machinelist[q - 1].get(m, 0) + 1
 
@@ -79,14 +81,14 @@ if __name__ == '__main__':
                 n_search += t
                 if tid not in cached[m]:
                     all_cached = False
-                    print term, m, 
+                    #print term, m, 
                 else:
                     n_hit += t
         if all_cached and has_term:
             n_all_cached += 1
         else:
             pass
-            print line 
+            #print line 
         if has_term:
             n_queries += 1
         qid += 1
