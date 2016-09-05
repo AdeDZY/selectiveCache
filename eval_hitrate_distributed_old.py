@@ -66,6 +66,8 @@ if __name__ == '__main__':
     n_hit = 0
     n_search = 0
     n_queries = 0
+    miss_single = 0
+    miss_multi = 0
     qid = 0
     for line in args.test_queries_file:
         qterms = line.split(' ')
@@ -86,13 +88,17 @@ if __name__ == '__main__':
                     n_hit += t
         if all_cached and has_term:
             n_all_cached += 1
-        else:
+        if not all_cached and has_term:
+            if len(qterms) == 1:
+                miss_single += 1
+            else:
+                miss_multi += 1
             pass
             #print line 
         if has_term:
             n_queries += 1
         qid += 1
 
-    print n_queries, n_all_cached, n_search, n_hit, float(n_hit)/n_search
+    print n_queries, n_all_cached, n_search, n_hit, float(n_hit)/n_search, miss_single, miss_multi
 
 

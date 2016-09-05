@@ -45,4 +45,4 @@ if __name__ == '__main__':
                 fout.write(line.strip() + ' ' + str(machine_df.get(tid, 0)) + '\n')
                 total += machine_df[tid]
             else:
-                continue
+                break #continue
