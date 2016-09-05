@@ -18,7 +18,7 @@ if __name__ == '__main__':
     upper_bound = args.memory_size * 1024 * 1024 * 1024 / 8
 
     global_qtfdf = []
-    for line in args.term_qtfdf_file:
+    for line in args.global_qtfdf_file:
         term, tid, qtfdf, qtf, df = line.split(' ')
         global_qtfdf.append((int(tid), line))
 
@@ -51,25 +51,28 @@ if __name__ == '__main__':
         for tid, line3 in global_qtfdf:
             if tid not in machine_df:
                 continue
-            if global_total + machine_df[tid] < upper_bound * args.memroy_ratio:
+            #if float(line3.strip().split()[2]) < 0.00125: break 
+            if global_total + machine_df[tid] < upper_bound * args.memory_ratio:
+            #if global_total + machine_df[tid] < upper_bound: 
                 for shard in shards:
                     if shard_df[shard].get(tid, 0) > 0:
-                        fout.write(line.strip() + ' ' + str(machine_df.get(tid, 0)) + ' ' + str(shard) + '\n')
+                        fout.write(line3.strip() + ' '  + str(shard) + '\n')
                 global_total += machine_df[tid]
                 global_cached.add(tid)
             else:
                 break
                 # continue
-
+        continue
         # sort all qtfdf
         tmp = []
         for shard in shards:
-            for line in open(args.shard_qtfdf_dir + "/{0}.qtfdf".format(shard)):
-                term, tid, qtfdf, qtf, df = line.strip().split()
+            for line4 in open(args.shard_qtfdf_dir + "/{0}.qtfdf".format(shard)):
+                term, tid, qtfdf, qtf, df = line4.strip().split()
                 tid = int(tid)
-                qtfdf = float(qtfdf)
                 df = int(df)
-                if df <= 0: continue
+                if df <= 1: continue
+                #qtfdf = float(qtfdf)
+                qtfdf = float(qtf)/(float(df))
                 tmp.append((qtfdf, term, tid, qtf, df, shard))
         tmp = sorted(tmp, reverse=True)
 

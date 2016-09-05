@@ -83,7 +83,7 @@ if __name__ == '__main__':
             for s in shardlist[qid]:
                 n_search += 1
                 if tid not in cached[s - 1]:
-                    # print term, s,
+                    print term, s,
                     all_cached = False
                 else:
                     n_hit += 1
@@ -94,8 +94,8 @@ if __name__ == '__main__':
                 miss_single += 1
             else:
                 miss_multi += 1
-            pass
-            # print line
+            #pass
+            print line
         if has_term:
             n_queries += 1
         qid += 1
