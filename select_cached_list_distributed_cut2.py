@@ -21,7 +21,6 @@ if __name__ == '__main__':
         term, tid, qtfdf, qtf, df = line.split(' ')
         global_qtfdf.append((int(tid), line))
 
-    i = 0
 
     # read machine df and machine query log
     shard_df = {}
@@ -49,8 +48,9 @@ if __name__ == '__main__':
             shard_qtf[shard][tid] = shard_qtf[shard].get(tid, 0) + int(qtf)
 
     # for each machine
+    i = 0 
     for line in args.shard_distribution_file:
-        i += 1
+        i += 1 
         shards = [int(t) for t in line.split()] # shards on this machine
         fout = open(join(args.output_dir, str(i)), 'w')  # cached file for this machine
 
@@ -58,13 +58,14 @@ if __name__ == '__main__':
         spear = 0
         printed = False
         for tid, line3 in global_qtfdf:
-            qtfs = [(shard_qtf[shard].get(tid), shard) for shard in range(123) if tid in shard_qtf[shard]]
+            qtfs = [(shard_qtf[shard].get(tid), shard) for shard in range(1, 124) if tid in shard_qtf[shard]]
             qtfs = sorted(qtfs, reverse=True)
-            i = 0
+            j = 0
             for qtf, shard in qtfs:
-                i += 1 
+                j += 1 
+                if shard not in shards: continue
                 if shard_df[shard].get(tid, 0) > 0:
-                    if len(qtfs) < 10 or (i <= len(qtfs) * 0.95 or qtf > 10):
+                    if len(qtfs) < 60 or (j <= len(qtfs) * 0.8 ):
                         if global_total + shard_df[shard][tid] <= upper_bound:
                             fout.write(line3.strip() + ' ' + str(shard) + '\n')
                             global_total += shard_df[shard][tid]

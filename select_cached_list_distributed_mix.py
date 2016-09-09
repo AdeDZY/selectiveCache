@@ -52,9 +52,7 @@ if __name__ == '__main__':
         for tid, line3 in global_qtfdf:
             if tid not in machine_df:
                 continue
-            #if float(line3.strip().split()[2]) < 0.00125: break 
             if global_total + machine_df[tid] < upper_bound * args.memory_ratio:
-            #if global_total + machine_df[tid] < upper_bound: 
                 for shard in shards:
                     if shard_df[shard].get(tid, 0) > 0:
                         fout.write(line3.strip() + ' '  + str(shard) + '\n')
