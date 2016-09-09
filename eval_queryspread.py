@@ -11,12 +11,18 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     term2shards = {}
-    for shard in range(args.n_shards):
+    for shard in range(1, args.n_shards + 1):
         for line in open(args.shard_qtfdf_dir + "/{0}.qtfdf".format(shard)):
             term, tid, qtfdf, qtf, df = line.strip().split()
             tid = int(tid)
-            term2shards[tid] = term2shards.get(tid, 0) + 1
+            if tid not in term2shards:
+                term2shards[tid] = [0 for i in range(args.n_shards)]
+            term2shards[tid][shard - 1] = int(qtf)
 
-    for tid, nshard in term2shards:
-        print tid, nshard
+    for tid, vals in term2shards.items():
+        print tid, 
+        vals = sorted(vals, reverse=True) 
+        for v in vals:
+            print v,
+        print ""
 

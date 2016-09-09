@@ -59,16 +59,23 @@ if __name__ == '__main__':
                 shard_qtf[shard][tid] = shard_qtf[shard].get(tid, 0) + int(qtf)
 
         global_total = 0
+        spear = 0
+        printed = False
         for tid, line3 in global_qtfdf:
             if tid not in machine_df:
                 continue
-            for shard in shards:
-                if shard_df[shard].get(tid, 0) > 0 and not (shard_qtf[shard].get(tid, 0) <= 0):
-                    if global_total + shard_df[shard][tid] < upper_bound:
-                        fout.write(line3.strip() + ' ' + str(shard) + '\n')
-                        global_total += shard_df[shard][tid]
-
-       # print total,
-       # for shard, t in shards_total.items():
-       #     print "{0}:{1}".format(shard, t/1000), #/float(total)),
-       # print ""
+            qtfs = [(shard_qtf[shard].get(tid), shard) for shard in range(123) if tid in shard_qtf[shard]]
+            qtfs = sorted(qtfs, reverse=True)
+            i = 0
+            for qtf, shard in qtfs:
+                i += 1 
+                if shard_df[shard].get(tid, 0) > 0:
+                    if len(qtfs) < 10 or (i <= len(qtfs) * 0.95 or qtf > 10):
+                        if global_total + shard_df[shard][tid] <= upper_bound:
+                            fout.write(line3.strip() + ' ' + str(shard) + '\n')
+                            global_total += shard_df[shard][tid]
+                    else:
+                        spear += shard_df[shard][tid] 
+                        if not printed and global_total + spear >= upper_bound:
+                            print spear, line3.strip() 
+                            printed = True

@@ -31,7 +31,7 @@ if __name__ == '__main__':
                 qtf = int(qtf)
                 if df <= 0 or tid in met:
                     continue
-                if qtf <= 0 and df > 500:
+                if qtf <= 0:
                     continue
                 cut_df[tid] = cut_df.get(tid, 0) + df
                 met.add(tid)
@@ -42,7 +42,7 @@ if __name__ == '__main__':
             continue
         df = cut_df[tid]
         qtf = int(qtf)
-        qtfdf = qtf/float(tmp2)
+        qtfdf = qtf/float(df)
         new_qtfdf.append((qtfdf, "{0} {1} {2} {3} {4}\n".format(term, tid, qtfdf, qtf, df)))
 
     new_qtfdf = sorted(new_qtfdf, reverse=True)
