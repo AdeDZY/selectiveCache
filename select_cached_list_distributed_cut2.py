@@ -22,48 +22,42 @@ if __name__ == '__main__':
         global_qtfdf.append((int(tid), line))
 
     i = 0
+
+    # read machine df and machine query log
+    shard_df = {}
+    shard_qtf = {}
+    for shard in range(1, 124):
+        shard_df[shard] = {}
+        p = join(args.shard_feature_dir, str(shard) + '.feat')
+        with open(p) as f:
+            for line2 in f:
+                tid, df, ctf, cent = line2.split(' ')
+                tid = int(tid)
+                df = int(df)
+                ctf = int(ctf)
+                if tid == -1:
+                    continue
+                shard_df[shard][tid] = df
+
+        shard_qtf[shard] = {}
+        for line4 in open(args.shard_qtfdf_dir + "/{0}.qtfdf".format(shard)):
+            term, tid, qtfdf, qtf, df = line4.strip().split()
+            tid = int(tid)
+            df = int(df)
+            if df <= 0:
+                continue
+            shard_qtf[shard][tid] = shard_qtf[shard].get(tid, 0) + int(qtf)
+
     # for each machine
     for line in args.shard_distribution_file:
         i += 1
         shards = [int(t) for t in line.split()] # shards on this machine
-        fout = open(join(args.output_dir, str(i)), 'w') # cached file for this machine
-
-        # select global terms
-        machine_df = {}
-        shard_df = {}
-        for shard in shards:
-            shard_df[shard] = {}
-            p = join(args.shard_feature_dir, str(shard) + '.feat')
-            with open(p) as f:
-                for line2 in f:
-                    tid, df, ctf, cent = line2.split(' ')
-                    tid = int(tid)
-                    df = int(df)
-                    ctf = int(ctf)
-                    if tid == -1:
-                        continue
-                    machine_df[tid] = machine_df.get(tid, 0) + df
-                    shard_df[shard][tid] = df
-
-        # local qtfdf
-        tmp = []
-        shard_qtf = {}
-        for shard in shards:
-            shard_qtf[shard] = {}
-            for line4 in open(args.shard_qtfdf_dir + "/{0}.qtfdf".format(shard)):
-                term, tid, qtfdf, qtf, df = line4.strip().split()
-                tid = int(tid)
-                df = int(df)
-                if df <= 0:
-                    continue
-                shard_qtf[shard][tid] = shard_qtf[shard].get(tid, 0) + int(qtf)
+        fout = open(join(args.output_dir, str(i)), 'w')  # cached file for this machine
 
         global_total = 0
         spear = 0
         printed = False
         for tid, line3 in global_qtfdf:
-            if tid not in machine_df:
-                continue
             qtfs = [(shard_qtf[shard].get(tid), shard) for shard in range(123) if tid in shard_qtf[shard]]
             qtfs = sorted(qtfs, reverse=True)
             i = 0
