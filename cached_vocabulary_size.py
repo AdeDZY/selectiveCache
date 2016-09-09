@@ -10,17 +10,25 @@ if __name__ == '__main__':
 
     n_machines = 16 
     # read cached
-    cached = set() 
+    cached = {}
     for m in range(1, n_machines + 1):
         cached_queries_file = open(join(args.cached_queries_dir, str(m)))
         tmp = set()
         for line in cached_queries_file:
-            items = line.split(' ')
+            items = line.strip().split(' ')
             term, tid = items[0:2]
+            shard = int(items[-1])
             tid = int(tid)
-            cached.add(tid)
+            if tid not in cached:
+                cached[tid] = []
+            cached[tid].append(shard)
             tmp.add(tid)
         print len(tmp)
 
     print len(cached)
+    for tid, vals in cached:
+        print tid, len(vals),
+        for v in vals:
+            print v,
+        print ""
 
