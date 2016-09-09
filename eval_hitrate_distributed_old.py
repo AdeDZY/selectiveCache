@@ -70,6 +70,9 @@ if __name__ == '__main__':
     miss_multi = 0
     qid = 0
     for line in args.test_queries_file:
+        if qid not in shardlist:
+            qid += 1
+            continue
         qterms = line.split(' ')
         all_cached = True
         has_term = False

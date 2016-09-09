@@ -63,7 +63,7 @@ if __name__ == '__main__':
             if tid not in machine_df:
                 continue
             for shard in shards:
-                if shard_df[shard].get(tid, 0) > 0 and shard_qtf[shard].get(tid, 0) > 0:
+                if shard_df[shard].get(tid, 0) > 0 and not (shard_qtf[shard].get(tid, 0) <= 0):
                     if global_total + shard_df[shard][tid] < upper_bound:
                         fout.write(line3.strip() + ' ' + str(shard) + '\n')
                         global_total += shard_df[shard][tid]

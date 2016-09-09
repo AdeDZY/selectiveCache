@@ -67,13 +67,19 @@ if __name__ == '__main__':
     n_hit = 0
     n_search = 0
     n_queries = 0
+    missing_shard_single = 0
+    missing_shard_multi = 0
     miss_single = 0
     miss_multi = 0
     qid = 0
     for line in args.test_queries_file:
+        if qid not in shardlist:
+            qid += 1
+            continue
         qterms = line.split(' ')
         all_cached = True
         has_term = False
+        shard_has_all = [0 for s in range(n_shards)]
         for term in qterms:
             term = term.strip().lower()
             if not term.isalpha() or term in stoplist:
@@ -83,8 +89,9 @@ if __name__ == '__main__':
             for s in shardlist[qid]:
                 n_search += 1
                 if tid not in cached[s - 1]:
-                    print term, s,
+                    #print term, s,
                     all_cached = False
+                    shard_has_all[s - 1] = 1 
                 else:
                     n_hit += 1
         if all_cached and has_term:
@@ -92,14 +99,16 @@ if __name__ == '__main__':
         if has_term and not all_cached:
             if len(qterms) == 1:
                 miss_single += 1
+                missing_shard_single += sum(shard_has_all)
             else:
                 miss_multi += 1
+                missing_shard_multi += sum(shard_has_all)
             #pass
-            print line
+            #print line
         if has_term:
             n_queries += 1
         qid += 1
 
-    print n_queries, n_all_cached, n_search, n_hit, float(n_hit)/n_search, miss_single, miss_multi
+    print n_queries, n_all_cached, n_search, n_hit, float(n_hit)/n_search, miss_single, miss_multi, missing_shard_single, missing_shard_multi
 
 

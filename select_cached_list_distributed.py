@@ -17,6 +17,7 @@ if __name__ == '__main__':
     l = []
     for line in args.term_qtfdf_file:
         term, tid, qtfdf, qtf, df = line.split(' ')
+        if int(qtf) <= 10: continue
         l.append((int(tid), line))
 
     i = 0

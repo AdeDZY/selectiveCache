@@ -20,6 +20,7 @@ if __name__ == '__main__':
     global_qtfdf = []
     for line in args.global_qtfdf_file:
         term, tid, qtfdf, qtf, df = line.split(' ')
+        if int(qtf) <= 10: continue
         global_qtfdf.append((int(tid), line))
 
     i = 0
@@ -62,7 +63,7 @@ if __name__ == '__main__':
             else:
                 break
                 # continue
-        continue
+        #continue
         # sort all qtfdf
         tmp = []
         for shard in shards:
