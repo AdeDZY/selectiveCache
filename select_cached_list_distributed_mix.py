@@ -13,9 +13,17 @@ if __name__ == '__main__':
     parser.add_argument("shard_distribution_file", type=argparse.FileType('r'))
     parser.add_argument("memory_ratio", type=float, help="cache ratio for global caching")
     parser.add_argument("output_dir")
+    parser.add_argument("--avg_qtfdf_filename", "-a", default=None)
+    parser.add_argument("--gamma","-g", type=float, default=0)
     args = parser.parse_args()
 
     upper_bound = args.memory_size * 1024 * 1024 * 1024 / 8
+    
+    avg_qtfdf = {}
+    if args.avg_qtfdf_filename:
+        for line in open(args.avg_qtfdf_filename):
+            tid, val = line.split()
+            avg_qtfdf[int(tid)] = float(val)
 
     global_qtfdf = []
     for line in args.global_qtfdf_file:
@@ -71,7 +79,7 @@ if __name__ == '__main__':
                 df = int(df)
                 if df <= 1: continue
                 #qtfdf = float(qtfdf)
-                qtfdf = float(qtf)/(float(df))
+                qtfdf = (1 - args.gamma) * float(qtf) / float(df) + args.gamma * avg_qtfdf.get(tid, 0)
                 tmp.append((qtfdf, term, tid, qtf, df, shard))
         tmp = sorted(tmp, reverse=True)
 

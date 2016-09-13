@@ -15,6 +15,7 @@ if __name__ == '__main__':
     org_qtfdf = []
     for line in args.org_qtfdf_file:
         term, tid, qtfdf, qtf, df = line.split(' ')
+        if int(qtf) < 10: continue
         org_qtfdf.append((int(tid), term, qtfdf, qtf, df))
 
     # recompute df
@@ -31,7 +32,7 @@ if __name__ == '__main__':
                 qtf = int(qtf)
                 if df <= 0 or tid in met:
                     continue
-                if qtf <= 0:
+                if qtf < 0:
                     continue
                 cut_df[tid] = cut_df.get(tid, 0) + df
                 met.add(tid)

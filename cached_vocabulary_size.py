@@ -26,9 +26,12 @@ if __name__ == '__main__':
         print len(tmp)
 
     print len(cached)
-    for tid, vals in cached:
+    nshard = 0
+    for tid, vals in cached.items():
         print tid, len(vals),
+        nshard += len(vals)
         for v in vals:
             print v,
         print ""
 
+    print nshard/float(len(cached))
