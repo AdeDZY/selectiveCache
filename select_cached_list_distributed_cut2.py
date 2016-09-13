@@ -3,6 +3,12 @@ import argparse
 from os import listdir
 from os.path import isfile, join
 import math
+import numpy as np
+
+def softmax(w, t = 1.0):
+    e = np.exp(np.array(w) / t)
+    dist = e / np.sum(e)
+    return dist
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -58,17 +64,23 @@ if __name__ == '__main__':
         spear = 0
         printed = False
         for tid, line3 in global_qtfdf:
-            qtfs = [(shard_qtf[shard].get(tid), shard) for shard in range(1, 124) if tid in shard_qtf[shard]]
+            qtfs = [(shard_qtf[shard].get(tid, 0), shard) for shard in range(1, 124)]
             qtfs = sorted(qtfs, reverse=True)
+            vals = [val for val, shard in qtfs]
+            eqtfs = softmax(vals, float(vals[0]))
+            for k in range(123):
+                if eqtfs < 0.0075:
+                    break
+            cutoff = k
             j = 0
-            for qtf, shard in qtfs:
+            for qtf, shard in qtfs[0:k]:
                 j += 1 
-                if shard not in shards: continue
+                if shard not in shards:
+                    continue
                 if shard_df[shard].get(tid, 0) > 0:
-                    if len(qtfs) < 60 or (j <= len(qtfs) * 0.8 ):
-                        if global_total + shard_df[shard][tid] <= upper_bound:
-                            fout.write(line3.strip() + ' ' + str(shard) + '\n')
-                            global_total += shard_df[shard][tid]
+                    if global_total + shard_df[shard][tid] <= upper_bound:
+                        fout.write(line3.strip() + ' ' + str(shard) + '\n')
+                        global_total += shard_df[shard][tid]
                     else:
                         spear += shard_df[shard][tid] 
                         if not printed and global_total + spear >= upper_bound:
