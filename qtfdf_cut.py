@@ -32,7 +32,7 @@ if __name__ == '__main__':
                 qtf = int(qtf)
                 if df <= 0 or tid in met:
                     continue
-                if qtf < 0:
+                if qtf <= 0:
                     continue
                 cut_df[tid] = cut_df.get(tid, 0) + df
                 met.add(tid)

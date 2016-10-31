@@ -26,10 +26,14 @@ if __name__ == '__main__':
             avg_qtfdf[int(tid)] = float(val)
 
     global_qtfdf = []
+    global_qtf = {}
+    global_df = {}
     for line in args.global_qtfdf_file:
         term, tid, qtfdf, qtf, df = line.split(' ')
         if int(qtf) <= 10: continue
         global_qtfdf.append((int(tid), line))
+        global_qtf[int(tid)] =int(qtf)
+        global_df[int(tid)] =int(df)
 
     i = 0
     # for each machine
@@ -79,7 +83,10 @@ if __name__ == '__main__':
                 df = int(df)
                 if df <= 1: continue
                 #qtfdf = float(qtfdf)
-                qtfdf = (1 - args.gamma) * float(qtf) / float(df) + args.gamma * avg_qtfdf.get(tid, 0)
+                if float(qtf)/global_qtf.get(tid,int(qtf)) >= 0.85:
+                    qtfdf = float(qtf)*10/global_df[tid]
+                else:
+                    qtfdf = (1 - args.gamma) * float(qtf) / (float(df) + 10) #/ (1 + math.exp(-float(qtf)/global_qtf.get(tid, int(qtf)))) + args.gamma * avg_qtfdf.get(tid, 0)
                 tmp.append((qtfdf, term, tid, qtf, df, shard))
         tmp = sorted(tmp, reverse=True)
 

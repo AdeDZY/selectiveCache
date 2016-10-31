@@ -38,7 +38,7 @@ if __name__ == '__main__':
         qid = items[0]
         query = queries[qid - 1]
         ms = set()
-        for shard in items[1: 1 + args.cutoff]:
+        for shard in items[1: min(1 + args.cutoff, len(items))]:
             m = shard2machine[shard]
             ms.add(m)
         for m in ms:

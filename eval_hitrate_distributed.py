@@ -29,6 +29,7 @@ if __name__ == '__main__':
             shard2machine[s] = m
             n_shards += 1
         m += 1
+    print n_shards
     n_machines = m
 
     # read vocab
