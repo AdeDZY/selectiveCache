@@ -5,30 +5,33 @@ import xml.etree.ElementTree as ET
 parser = argparse.ArgumentParser()
 parser.add_argument("queryfile")
 parser.add_argument("stop_file")
-parser.add_argument("--xml","-x", type=int, default=0)
+parser.add_argument("--rankbiased", '-r', action="store_true")
+
 args = parser.parse_args()
 
 termset = {}
-if not args.xml:
-	stoplist = set()
-	for line in open(args.stop_file):
-		stoplist.add(line.strip())
-	for line in open(args.queryfile):
-		terms = line.split()
-		for t in terms:
-			if t.isalpha() and t not in stoplist:
-				termset[t] = termset.get(t, 0) + 1
-	
-	t2 = sorted([(v,k) for k, v in termset.items()], reverse=True)
 
-	for f, t in t2:
-		print t + " " + str(f)
+stoplist = set()
+for line in open(args.stop_file):
+    stoplist.add(line.strip())
 
-else:
-	tree = ET.parse(args.queryfile)
-	root = tree.getroot()
-	for query in root:
-		text = query.find('text').text
-		terms = text.split()
-		for t in terms:
-			print t
+for line in open(args.queryfile):
+
+    if args.rankbiased:
+        items = line.strip().split('\t')
+        r = int(items[-1])
+        terms = items[0].split()
+    else:
+        terms = line.strip().split()
+
+    for t in terms:
+        if t.isalpha() and t not in stoplist:
+            if args.rankbiased:
+                termset[t] = termset.get(t, 0) + 1.0/r
+            else:
+                termset[t] = termset.get(t, 0) + 1.0
+
+t2 = sorted([(v, k) for k, v in termset.items()], reverse=True)
+
+for f, t in t2:
+    print t + " " + str(f)
