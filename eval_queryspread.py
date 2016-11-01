@@ -17,7 +17,7 @@ if __name__ == '__main__':
             tid = int(tid)
             if tid not in term2shards:
                 term2shards[tid] = [0 for i in range(args.n_shards)]
-            term2shards[tid][shard - 1] = int(qtf)
+            term2shards[tid][shard - 1] = float(qtf)
 
     for tid, vals in term2shards.items():
         print tid, 

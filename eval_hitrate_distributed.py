@@ -38,7 +38,7 @@ if __name__ == '__main__':
         term, tid, df = line.split(' ')
         tid = int(tid)
         vocab[term] = tid
-
+    missed_terms = {}
     # read cached
     cached = [set() for i in range(n_shards)]
     for m in range(1, n_machines + 1):
@@ -93,6 +93,7 @@ if __name__ == '__main__':
                     #print term, s,
                     all_cached = False
                     shard_has_all[s - 1] = 1 
+                    missed_terms[term] = missed_terms.get(term, 0) + 1
                 else:
                     n_hit += 1
         if all_cached and has_term:
@@ -111,5 +112,8 @@ if __name__ == '__main__':
         qid += 1
 
     print n_queries, n_all_cached, n_search, n_hit, float(n_hit)/n_search, miss_single, miss_multi, missing_shard_single, missing_shard_multi
+    tmp = sorted([(n, term) for term, n in missed_terms.items()], reverse=True)
+    for term, n in tmp:
+        print term, n
 
 

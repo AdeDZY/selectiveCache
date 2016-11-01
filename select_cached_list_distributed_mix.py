@@ -73,7 +73,8 @@ if __name__ == '__main__':
             else:
                 break
                 # continue
-        #continue
+        if args.gamma == 1:
+            continue
         # sort all qtfdf
         tmp = []
         for shard in shards:
@@ -82,11 +83,11 @@ if __name__ == '__main__':
                 tid = int(tid)
                 df = int(df)
                 if df <= 1: continue
-                #qtfdf = float(qtfdf)
-                if float(qtf)/global_qtf.get(tid,int(qtf)) >= 0.85:
-                    qtfdf = float(qtf)*10/global_df[tid]
-                else:
-                    qtfdf = (1 - args.gamma) * float(qtf) / (float(df) + 10) #/ (1 + math.exp(-float(qtf)/global_qtf.get(tid, int(qtf)))) + args.gamma * avg_qtfdf.get(tid, 0)
+                qtfdf = float(qtfdf)
+                #if float(qtf)/global_qtf.get(tid,float(qtf)) >= 0.85:
+                #    qtfdf = float(qtf)*10/global_df[tid]
+                #else:
+                #    qtfdf = (1 - args.gamma) * float(qtf) / (float(df) + 10) #/ (1 + math.exp(-float(qtf)/global_qtf.get(tid, int(qtf)))) + args.gamma * avg_qtfdf.get(tid, 0)
                 tmp.append((qtfdf, term, tid, qtf, df, shard))
         tmp = sorted(tmp, reverse=True)
 
