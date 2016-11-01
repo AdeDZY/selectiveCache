@@ -15,6 +15,7 @@ if __name__ == '__main__':
     parser.add_argument("output_dir")
     parser.add_argument("--avg_qtfdf_filename", "-a", default=None)
     parser.add_argument("--gamma","-g", type=float, default=0)
+    parser.add_argument("--global_candidate_file", '-g', default=None, type=argparse.FileType('r'))
     args = parser.parse_args()
 
     upper_bound = args.memory_size * 1024 * 1024 * 1024 / 8
@@ -28,9 +29,16 @@ if __name__ == '__main__':
     global_qtfdf = []
     global_qtf = {}
     global_df = {}
+
+    cands = None
+    if args.global_candidate_file:
+        line = args.global_candidate_file.readline()
+        cands = set([int(tid) for tid in line.split(' ')])
+
     for line in args.global_qtfdf_file:
         term, tid, qtfdf, qtf, df = line.split(' ')
         if int(qtf) <= 10: continue
+        if cands and int(tid) not in cands: continue
         global_qtfdf.append((int(tid), line))
         global_qtf[int(tid)] =int(qtf)
         global_df[int(tid)] =int(df)
