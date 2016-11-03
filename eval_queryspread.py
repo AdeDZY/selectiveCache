@@ -26,6 +26,6 @@ if __name__ == '__main__':
         #for v in vals:
         #    print v,
         #print ""
-        if l >= 110: 
+        if l >= 60: 
             print tid,
 

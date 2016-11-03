@@ -94,6 +94,7 @@ if __name__ == '__main__':
                     all_cached = False
                     shard_has_all[s - 1] = 1 
                     missed_terms[term] = missed_terms.get(term, 0) + 1
+                    if term == "revenues": print line
                 else:
                     n_hit += 1
         if all_cached and has_term:
