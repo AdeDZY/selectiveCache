@@ -16,7 +16,7 @@ if __name__ == '__main__':
     for shard in shards:
         for line in open(args.shard_qtfdf_dir + "/{0}.qtfdf".format(shard)):
             term, tid, qtfdf, qtf, df = line.strip().split()
-            shard_loads[shard - 1] += int(df) * int(qtf)
+            shard_loads[shard - 1] += int(df) * float(qtf)
 
     tmp = sorted([(load, shard) for shard, load in enumerate(shard_loads)], reverse=True)
     distr = [[] for m in range(args.n_machines)]

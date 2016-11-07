@@ -40,7 +40,7 @@ if __name__ == '__main__':
         #if int(qtf) <= 10: continue
         if cands and int(tid) not in cands: continue
         global_qtfdf.append((int(tid), line))
-        global_qtf[int(tid)] =int(qtf)
+        global_qtf[int(tid)] = float(qtf)
         global_df[int(tid)] =int(df)
 
     i = 0
@@ -72,7 +72,8 @@ if __name__ == '__main__':
         for tid, line3 in global_qtfdf:
             if tid not in machine_df:
                 continue
-            if len(global_cached) < 500 and  global_total + machine_df[tid] < upper_bound * args.memory_ratio:
+            #if len(global_cached) < 500 and  global_total + machine_df[tid] < upper_bound * args.memory_ratio:
+            if global_total + machine_df[tid] < upper_bound * args.memory_ratio:
                 for shard in shards:
                     if shard_df[shard].get(tid, 0) > 0:
                         fout.write(line3.strip() + ' '  + str(shard) + '\n')

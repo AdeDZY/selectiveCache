@@ -35,7 +35,7 @@ if __name__ == '__main__':
     # read vocab
     vocab = {}
     for line in args.intQterm_file:
-        term, tid, df = line.split(' ')
+        term, qtf, tid, df = line.split(' ')
         tid = int(tid)
         vocab[term] = tid
     missed_terms = {}
@@ -94,7 +94,7 @@ if __name__ == '__main__':
                     all_cached = False
                     shard_has_all[s - 1] = 1 
                     missed_terms[term] = missed_terms.get(term, 0) + 1
-                    if term == "revenues": print line
+                    #if term == "revenues": print line
                 else:
                     n_hit += 1
         if all_cached and has_term:
@@ -113,8 +113,8 @@ if __name__ == '__main__':
         qid += 1
 
     print n_queries, n_all_cached, n_search, n_hit, float(n_hit)/n_search, miss_single, miss_multi, missing_shard_single, missing_shard_multi
-    tmp = sorted([(n, term) for term, n in missed_terms.items()], reverse=True)
-    for term, n in tmp:
-        print term, n
+    #tmp = sorted([(n, term) for term, n in missed_terms.items()], reverse=True)
+    #for term, n in tmp:
+    #    print term, n
 
 
