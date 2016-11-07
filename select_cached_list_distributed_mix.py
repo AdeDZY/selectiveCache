@@ -16,6 +16,7 @@ if __name__ == '__main__':
     parser.add_argument("--avg_qtfdf_filename", "-a", default=None)
     parser.add_argument("--gamma","-g", type=float, default=0)
     parser.add_argument("--global_candidate_file", '-c', default=None, type=argparse.FileType('r'))
+    parser.add_argument("--n", '-n', default=10000000000, type=int)
     args = parser.parse_args()
 
     upper_bound = args.memory_size * 1024 * 1024 * 1024 / 8
@@ -72,8 +73,8 @@ if __name__ == '__main__':
         for tid, line3 in global_qtfdf:
             if tid not in machine_df:
                 continue
-            #if len(global_cached) < 500 and  global_total + machine_df[tid] < upper_bound * args.memory_ratio:
-            if global_total + machine_df[tid] < upper_bound * args.memory_ratio:
+            if len(global_cached) < args.n and  global_total + machine_df[tid] < upper_bound * args.memory_ratio:
+            #if global_total + machine_df[tid] < upper_bound * args.memory_ratio:
                 for shard in shards:
                     if shard_df[shard].get(tid, 0) > 0:
                         fout.write(line3.strip() + ' '  + str(shard) + '\n')

@@ -27,8 +27,8 @@ for line in open(args.queryfile):
     for t in terms:
         if t.isalpha() and t not in stoplist:
             if args.rankbiased:
-                #termset[t] = termset.get(t, 0) + 1.0/math.log(r + 1)
-                termset[t] = termset.get(t, 0) + 1.0/math.log(int(r/3)*3 + 2)
+                termset[t] = termset.get(t, 0) + 1.0/math.log(r + 1)
+                #termset[t] = termset.get(t, 0) + 1.0/math.log(int(r/3)*3 + 2)
             else:
                 termset[t] = termset.get(t, 0) + 1.0
 
