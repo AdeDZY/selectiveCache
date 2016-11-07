@@ -41,8 +41,8 @@ if __name__ == '__main__':
         vocab[term] = tid
 
     # read shard vocab
-    shard_vocab = [set() for i in range(n_machines)]
-    for i in range(n_machines):
+    shard_vocab = [set() for i in range(n_shards)]
+    for i in range(n_shards):
         with open(args.shard_df_dir + '/{0}'.format(i + 1)) as f:
             for line in f:
                 tid, freq = line.split()
