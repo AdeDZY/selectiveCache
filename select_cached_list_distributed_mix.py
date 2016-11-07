@@ -29,7 +29,7 @@ if __name__ == '__main__':
     global_qtfdf = []
     global_qtf = {}
     global_df = {}
--
+
     cands = None
     if args.global_candidate_file:
         line = args.global_candidate_file.readline()
