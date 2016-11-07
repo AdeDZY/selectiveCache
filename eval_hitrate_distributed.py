@@ -11,6 +11,7 @@ if __name__ == '__main__':
     parser.add_argument("query_shardlist_file", type=argparse.FileType('r'))
     parser.add_argument("shard_distribution_file", type=argparse.FileType('r'))
     parser.add_argument("stoplist_file", type=argparse.FileType('r'))
+    parser.add_argument("shard_df_dir")
     parser.add_argument("--shardlim", "-l", type=int, default=123)
     args = parser.parse_args()
 
@@ -38,7 +39,19 @@ if __name__ == '__main__':
         term, qtf, tid, df = line.split(' ')
         tid = int(tid)
         vocab[term] = tid
+
+    # read shard vocab
+    shard_vocab = [set() for i in range(n_machines)]
+    for i in range(n_machines):
+        with open(args.shard_df_dir + '/{0}'.format(i + 1)) as f:
+            for line in f:
+                tid, freq = line.split()
+                tid = int(tid)
+                shard_vocab[i].add(tid)
+
+
     missed_terms = {}
+
     # read cached
     cached = [set() for i in range(n_shards)]
     for m in range(1, n_machines + 1):
@@ -91,7 +104,7 @@ if __name__ == '__main__':
             tid = vocab.get(term, -1)
             for s in shardlist[qid]:
                 n_search += 1
-                if tid not in cached[s - 1]:
+                if tid in shard_vocab[s - 1] and tid not in cached[s - 1]:
                     #print term, s,
                     all_cached = False
                     shard_has_all[s - 1] = 1 
