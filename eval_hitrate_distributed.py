@@ -57,6 +57,8 @@ if __name__ == '__main__':
     for line in args.query_shardlist_file:
         items = [int(t) for t in line.strip().split(' ')]
         q = items[0]
+        if args.shardlim == 130:
+            items = [q] + range(1, 131)
         shardlist[q - 1] = items[1:min(args.shardlim + 1,len(items))]
         machinelist[q - 1] = set()
         for s in items[1:min(args.shardlim + 1,len(items))]:
@@ -94,7 +96,6 @@ if __name__ == '__main__':
                     all_cached = False
                     shard_has_all[s - 1] = 1 
                     missed_terms[term] = missed_terms.get(term, 0) + 1
-                    #if term == "revenues": print line
                 else:
                     n_hit += 1
         if all_cached and has_term:

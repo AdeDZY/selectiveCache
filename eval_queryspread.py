@@ -22,13 +22,13 @@ if __name__ == '__main__':
     total_l = 0 
 
     for l, tid, vals in tmp:
-        print tid, l, 
-        total_l += l
-        vals = sorted([v for v in vals if v > 0], reverse=True) 
-        for v in vals:
-            print v,
-        print ""
-    print float(total_l) / len(tmp)
-        #if l >= 60: 
-        #    print tid,
+        #print tid, l, 
+        #total_l += l
+        #vals = sorted([v for v in vals if v > 0], reverse=True) 
+        #for v in vals:
+        #    print v,
+        #print ""
+        if 1 <= l < 40: 
+            print tid,
+    #print float(total_l) / len(tmp)
 
