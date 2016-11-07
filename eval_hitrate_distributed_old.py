@@ -34,7 +34,7 @@ if __name__ == '__main__':
     # read vocab
     vocab = {}
     for line in args.intQterm_file:
-        term, tid, df = line.split(' ')
+        term, qtf, tid, df = line.split(' ')
         tid = int(tid)
         vocab[term] = tid
 
@@ -55,7 +55,9 @@ if __name__ == '__main__':
     machinelist = {}
     for line in args.query_shardlist_file:
         items = [int(t) for t in line.strip().split(' ')]
+        #items = range(1, 131)
         q = items[0]
+        items = [q] + range(1, 131)
         lim = min(len(items) - 1, args.shardlim)
         shardlist[q - 1] = items[1:lim + 1]
         machinelist[q - 1] = {} 

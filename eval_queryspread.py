@@ -18,11 +18,14 @@ if __name__ == '__main__':
             if tid not in term2shards:
                 term2shards[tid] = [0 for i in range(args.n_shards)]
             term2shards[tid][shard - 1] = float(qtf)
+    tmp = sorted([(len([v for v in vals if v > 5]), tid, vals) for tid, vals in term2shards.items()], reverse=True)
 
-    for tid, vals in term2shards.items():
-        print tid, 
-        vals = sorted(vals, reverse=True) 
-        for v in vals:
-            print v,
-        print ""
+    for l, tid, vals in tmp:
+        #print tid, l, 
+        #vals = sorted(vals, reverse=True) 
+        #for v in vals:
+        #    print v,
+        #print ""
+        if l >= 60: 
+            print tid,
 

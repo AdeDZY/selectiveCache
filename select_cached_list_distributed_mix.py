@@ -15,7 +15,7 @@ if __name__ == '__main__':
     parser.add_argument("output_dir")
     parser.add_argument("--avg_qtfdf_filename", "-a", default=None)
     parser.add_argument("--gamma","-g", type=float, default=0)
-    parser.add_argument("--global_candidate_file", '-g', default=None, type=argparse.FileType('r'))
+    parser.add_argument("--global_candidate_file", '-c', default=None, type=argparse.FileType('r'))
     args = parser.parse_args()
 
     upper_bound = args.memory_size * 1024 * 1024 * 1024 / 8
@@ -37,10 +37,10 @@ if __name__ == '__main__':
 
     for line in args.global_qtfdf_file:
         term, tid, qtfdf, qtf, df = line.split(' ')
-        if int(qtf) <= 10: continue
+        #if int(qtf) <= 10: continue
         if cands and int(tid) not in cands: continue
         global_qtfdf.append((int(tid), line))
-        global_qtf[int(tid)] =int(qtf)
+        global_qtf[int(tid)] = float(qtf)
         global_df[int(tid)] =int(df)
 
     i = 0
@@ -72,16 +72,19 @@ if __name__ == '__main__':
         for tid, line3 in global_qtfdf:
             if tid not in machine_df:
                 continue
+            #if len(global_cached) < 500 and  global_total + machine_df[tid] < upper_bound * args.memory_ratio:
             if global_total + machine_df[tid] < upper_bound * args.memory_ratio:
                 for shard in shards:
                     if shard_df[shard].get(tid, 0) > 0:
                         fout.write(line3.strip() + ' '  + str(shard) + '\n')
                 global_total += machine_df[tid]
                 global_cached.add(tid)
+                #print tid
             else:
                 break
                 # continue
-        if args.gamma == 1:
+        print len(global_cached)
+        if args.memory_ratio == 1:
             continue
         # sort all qtfdf
         tmp = []

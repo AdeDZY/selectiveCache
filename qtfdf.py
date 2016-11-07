@@ -12,7 +12,7 @@ if __name__ == '__main__':
     all_term = {}
     for line in args.int_term_file:
         term, qtf, tid, df = line.split(' ')
-        qtf = int(qtf)
+        qtf = float(qtf)
         tid = int(tid)
         df = int(df)
         if df < 1: continue
