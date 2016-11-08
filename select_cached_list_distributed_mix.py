@@ -84,7 +84,7 @@ if __name__ == '__main__':
             else:
                 break
                 # continue
-        print len(global_cached)
+        #print len(global_cached)
         if args.memory_ratio == 1:
             continue
         # sort all qtfdf
@@ -94,7 +94,7 @@ if __name__ == '__main__':
                 term, tid, qtfdf, qtf, df = line4.strip().split()
                 tid = int(tid)
                 df = int(df)
-                if df <= 1: continue
+                if df <= 0: continue
                 qtfdf = float(qtfdf)
                 #if float(qtf)/global_qtf.get(tid,float(qtf)) >= 0.85:
                 #    qtfdf = float(qtf)*10/global_df[tid]

@@ -50,7 +50,7 @@ if __name__ == '__main__':
                 shard_vocab[i].add(tid)
 
 
-    missed_terms = {}
+    #missed_terms = {}
 
     # read cached
     cached = [set() for i in range(n_shards)]
@@ -108,7 +108,7 @@ if __name__ == '__main__':
                     #print term, s,
                     all_cached = False
                     shard_has_all[s - 1] = 1 
-                    missed_terms[term] = missed_terms.get(term, 0) + 1
+                    #missed_terms[term] = missed_terms.get(term, 0) + 1
                 else:
                     n_hit += 1
         if all_cached and has_term:

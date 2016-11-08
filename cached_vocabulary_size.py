@@ -23,7 +23,7 @@ if __name__ == '__main__':
                 cached[tid] = []
             cached[tid].append(shard)
             tmp.add(tid)
-        print len(tmp)
+    #    print len(tmp)
 
     print len(cached)
     #nshard = 0
